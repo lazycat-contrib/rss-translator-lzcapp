@@ -1,0 +1,31 @@
+lzc-sdk-version: "0.1"
+name: RSS翻译器
+package: cloud.lazycat.app.rss-translator
+version: 2025.5.27
+description: RSS翻译器
+homepage: hhttps://github.com/versun/RSS-Translator
+author: versun
+application:
+  subdomain: rss-translator
+  background_task: true
+  public_path:
+    - /
+  routes:
+    - /=http://rsstranslator:8000/
+services:
+  rsstranslator:
+    image: registry.lazycat.cloud/czyt/rsstranslator/rsstranslator:1009bf0c771b6307
+    environment:
+      - PYTHONUNBUFFERED=0
+      - PYTHONDONTWRITEBYTECODE=1
+      - PORT=8000
+      - DEBUG=0
+      - DEMO=0
+      - USER_MANAGEMENT=0
+      - LOG_LEVEL=ERROR
+      - HUEY_WORKERS=3
+      - CSRF_TRUSTED_ORIGINS=https://${LAZYCAT_APP_DOMAIN}
+      - default_update_frequency=30
+      - default_max_posts=20
+    binds:
+      - /lzcapp/var/data:/home/rsstranslator/data
