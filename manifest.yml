@@ -32,15 +32,15 @@ services:
     depends_on:
       - rssbox_redis
 
-    rssbox_redis:
-      image: registry.lazycat.cloud/edward/library/redis:4c6b9d7b7a334a2e
-      binds:
-        - /lzcapp/var/redis:/data
-      healthcheck:
-        test:
-          - CMD-SHELL
-          - redis-cli ping
-        interval: 30s
+  rssbox_redis:
+    image: registry.lazycat.cloud/edward/library/redis:4c6b9d7b7a334a2e
+    binds:
+      - /lzcapp/var/redis:/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - redis-cli ping
+      interval: 30s
 
 locales:
   zh:
