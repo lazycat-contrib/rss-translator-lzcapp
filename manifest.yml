@@ -1,9 +1,9 @@
-lzc-sdk-version: "0.1"
-name: RSS翻译器
+name: RSSBox
 package: cloud.lazycat.app.rss-translator
-version: 2025.5.27
-description: RSS翻译器
-homepage: hhttps://github.com/versun/RSS-Translator
+version: 2025.9.18
+min_os_version: 1.3.8
+description: 让RSS管理更智能，让信息获取更高效
+homepage: https://github.com/versun/RSS-Translator
 author: versun
 application:
   subdomain: rss-translator
@@ -14,18 +14,41 @@ application:
     - /=http://rsstranslator:8000/
 services:
   rsstranslator:
-    image: registry.lazycat.cloud/czyt/rsstranslator/rsstranslator:1009bf0c771b6307
+    # versun/rssbox:2025.9.18
+    image: registry.lazycat.cloud/czyt/versun/rssbox:0651b2ed8e7b5f9c
     environment:
-      - PYTHONUNBUFFERED=0
-      - PYTHONDONTWRITEBYTECODE=1
+      - SITE_URL=https://${LAZYCAT_APP_DOMAIN}
+      - REDIS_URL=redis://rssbox_redis:6379/0
+      - CSRF_TRUSTED_ORIGINS=https://${LAZYCAT_APP_DOMAIN}
+      - DEFAULT_TARGET_LANGUAGE="Chinese Simplified"
       - PORT=8000
       - DEBUG=0
       - DEMO=0
       - USER_MANAGEMENT=0
       - LOG_LEVEL=ERROR
-      - HUEY_WORKERS=3
-      - CSRF_TRUSTED_ORIGINS=https://${LAZYCAT_APP_DOMAIN}
-      - default_update_frequency=30
       - default_max_posts=20
     binds:
       - /lzcapp/var/data:/home/rsstranslator/data
+    depends_on:
+      - rssbox_redis
+
+    rssbox_redis:
+      image: registry.lazycat.cloud/edward/library/redis:4c6b9d7b7a334a2e
+      binds:
+        - /lzcapp/var/redis:/data
+      healthcheck:
+        test:
+          - CMD-SHELL
+          - redis-cli ping
+        interval: 30s
+
+locales:
+  zh:
+    name: "RSSBox"
+    description: "让RSS管理更智能，让信息获取更高效 "
+  zh_CN:
+    name: "RSSBox"
+    description: "让RSS管理更智能，让信息获取更高效 "
+  en:
+    name: "RSSBox"
+    description: "Smarter RSS management, more efficient information access"
