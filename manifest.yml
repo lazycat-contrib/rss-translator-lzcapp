@@ -28,7 +28,7 @@ services:
       - LOG_LEVEL=ERROR
       - default_max_posts=20
     binds:
-      - /lzcapp/var/data:/home/rsstranslator/data
+      - /lzcapp/var/data:/app/data
     depends_on:
       - rssbox_redis
 
